@@ -1,21 +1,37 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
+
+const questions = [
+  {
+    id: 1,
+    title: "InfinteScrollWithDebounce",
+    link: "/InfiniteScrollWithDebounce"
+  },
+  {
+    id: 2,
+    title: "TicTacToe",
+    link: "/tic-tac-toe"
+  },
+  {
+    id: 3,
+    title: "DebouncedTypeAhead",
+    link: "/debouncedTypeAhead"
+  }
+]
 
 const HomePage = () => {
   return (
     <div className='flex flex-col items-center justify-center gap-10 p-20'>
-      <Link 
-        href="/InfiniteScrollWithDebounce"
-        className='border p-4 rounded bg-gray-900 border-gray-700 cursor-pointer min-w-sm max-w-sm'
-      >
-        InfinteScrollWithDebounce
-      </Link> 
-      <Link 
-        href={"/tic-tac-toe"}
-        className='border p-4 rounded bg-gray-900 border-gray-700 cursor-pointer min-w-sm max-w-sm'
-      >
-          TicTacToe
-      </Link>
+      {questions.map((question) => {
+        return (
+          <Link 
+            key={question.id}
+            href={question.link}
+            className='border p-4 rounded bg-gray-900 border-gray-700 cursor-pointer min-w-sm max-w-sm'
+          >
+            {question.title}
+          </Link>
+        )
+      })}
     </div>
   )
 }
