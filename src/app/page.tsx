@@ -15,6 +15,11 @@ const questions = [
     id: 3,
     title: "DebouncedTypeAhead",
     link: "/debouncedTypeAhead"
+  },
+  {
+    id: 4, 
+    title: "NestedComments",
+    link: "/nestedComments"
   }
 ]
 
