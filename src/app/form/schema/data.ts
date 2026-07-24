@@ -21,12 +21,3 @@ export const formSchema = [
     required: true,
   },
 ];
-
-export interface FormField {
-  id: string;
-  label: string;
-  type: "text" | "email" | "select" | "password";
-  placeholder?: string;
-  required?: boolean;
-  options?: string[];
-}

@@ -1,6 +1,7 @@
 "use client";
 import { formSchema } from "@/app/dynamicForm/schema/data";
 import React, { useState } from "react";
+import { ComponentMap } from "./components/ComponentMap";
 
 const DynamicForm = () => {
     const [formData, setFormData] = useState<Record<string, string>>({});
@@ -43,54 +44,30 @@ const DynamicForm = () => {
             onSubmit={handleSubmit}
             className="flex flex-col space-y-4 bg-white/90 text-black p-20 rounded-2xl"
         >
-            {formSchema.map((field) => (
-                <div 
-                    key={field.id}
-                    className="flex flex-col gap-1"
-                >
-                    <label>{field.label} : </label>
+            {formSchema.map((field) => {
+                const Component = ComponentMap[field.type];
 
-                    {field.type !== "select" ? (
-                        <>
-                            <input 
-                                type={field.type}
-                                name={field.id}
-                                value={formData[field.id] || ""}
-                                onChange={handleChange}
-                                className="border-2 rounded p-2 w-full"
-                                placeholder={field.placeholder}
-                            />
-                            {errors[field.id] && (
-                                <p className="text-red-400 text-xs">{errors[field.id]}</p>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <select
-                                name={field.id}
-                                value={formData[field.id] || ""}
-                                onChange={handleChange}
-                                className="border-2 rounded p-2 w-full"
-                            >
-                                <option value="">Select Country</option>
+                return (
+                    <div 
+                        key={field.id}
+                        className="flex flex-col gap-1"
+                    >
+                        <label>{field.label} : </label>
 
-                                {field.options?.map((option) =>  (
-                                    <option 
-                                        key={option}
-                                        value={option}
-                                    >
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
+                        <Component
+                            field={field}
+                            value={formData[field.id] || ""}
+                            onChange={handleChange}
+                        />
 
-                            {errors[field.id] && (
-                                <p className="text-red-400 text-xs">{errors[field.id]}</p>
-                            )}
-                        </>
-                    )} 
-                </div>
-            ))}
+                        {errors[field.id] && (
+                            <p className="text-red-500 text-xs">
+                                {errors[field.id]}
+                            </p>
+                        )}
+                    </div>
+                )
+            })}
 
             <button 
                 type="submit"
