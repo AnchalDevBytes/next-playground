@@ -20,6 +20,11 @@ const questions = [
     id: 4, 
     title: "NestedComments",
     link: "/nestedComments"
+  },
+  {
+    id: 5,
+    title: "DynamicForm",
+    link: "/dynamicForm"
   }
 ]
 
