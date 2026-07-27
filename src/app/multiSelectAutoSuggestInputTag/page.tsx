@@ -1,6 +1,6 @@
 "use client";
 import useDebounce from "@/hooks/debounce";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface User {
     id: number;
@@ -18,6 +18,8 @@ const MultiSelectAutoSuggestInputTag = () => {
     const controllerRef = useRef<AbortController | null>(null);
 
     const cacheRef = useRef<Map<string, User[]>>(new Map());
+
+    const [focusedIdx, setFocusedIdx] = useState(-1);
 
     const fetchusers = async () => {
         if(!debouncedSearch.trim()) {
@@ -81,6 +83,32 @@ const MultiSelectAutoSuggestInputTag = () => {
         );
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === "ArrowDown") {
+            setFocusedIdx((prev) => 
+                Math.min(prev + 1, suggestions.length - 1)
+            );
+        } else if(e.key === "ArrowUp") {
+            setFocusedIdx((prev) =>
+                Math.max(prev-1, 0)
+            );
+        } else if(e.key === "Enter") {
+            e.preventDefault();
+
+            if(focusedIdx >= 0) {
+                handleSelect(suggestions[focusedIdx]);
+            }
+        } else if(e.key === "Backspace" && !search) {
+            setSelectedTags((prev) => prev.slice(0, -1));
+        } else if(e.key === "Escape") {
+            setSuggestions([]);
+        }
+    }
+
+    useEffect(() => {
+        setFocusedIdx(-1);
+    }, [suggestions]);
+
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen gap-10 p-10">
@@ -108,17 +136,20 @@ const MultiSelectAutoSuggestInputTag = () => {
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..."
                 className="p-3 rounded-xl text-white border min-w-sm max-w-sm"
+                onKeyDown={handleKeyDown}
             />
         </div>
 
         {loading && <p>Loading...</p>}
 
         <ul className="flex flex-col gap-5 text-sm">
-            {suggestions.map((user) => (
+            {suggestions.map((user, index) => (
                 <li
                     key={user.id}
                     onClick={() => handleSelect(user)}
-                    className="cursor-pointer border border-gray-700 p-2 rounded min-w-xs max-w-xs bg-gray-900"
+                    className={`cursor-pointer border border-gray-700 p-2 rounded min-w-xs max-w-xs bg-gray-900 ${
+                        focusedIdx === index && "bg-red-700 text-white"
+                    }`}
                 >
                     {user.firstName}
                 </li>
