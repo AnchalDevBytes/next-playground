@@ -25,6 +25,11 @@ const questions = [
     id: 5,
     title: "DynamicForm",
     link: "/dynamicForm"
+  },
+  {
+    id: 6,
+    title: "MultiSelectAutoSuggestInputTag",
+    link: "/multiSelectAutoSuggestInputTag"
   }
 ]
 
