@@ -30,6 +30,11 @@ const questions = [
     id: 6,
     title: "MultiSelectAutoSuggestInputTag",
     link: "/multiSelectAutoSuggestInputTag"
+  },
+  {
+    id: 7,
+    title: "CustomToastNotification",
+    link: "/customToastNotification"
   }
 ]
 
