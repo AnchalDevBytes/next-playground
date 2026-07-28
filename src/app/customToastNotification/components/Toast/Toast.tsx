@@ -1,12 +1,12 @@
 "use client";
-
 interface ToastProps {
+    id: number;
     message: string;
     type: "success" | "error";
-    onClose: () => void;
+    onClose: (id: number) => void;
 }
 
-const Toast = ({message, type, onClose} : ToastProps) => {
+const Toast = ({id, message, type, onClose} : ToastProps) => {
   return (
     <div
         className={`flex items-center justify-between gap-4 px-4 py-2 rounded-md text-white shadow-lg min-w-sm max-w-sm ${
@@ -16,7 +16,7 @@ const Toast = ({message, type, onClose} : ToastProps) => {
         {message}
 
         <button
-            onClick={onClose}
+            onClick={() => onClose(id)}
             className="font-bold hover:text-gray-200"
         >
             x

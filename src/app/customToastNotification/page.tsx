@@ -1,65 +1,36 @@
 "use client";
-import { useRef, useState } from "react";
-import Toast from "./components/Toast";
-
-interface Toast {
-    id: number;
-    message: string;
-    type: "success" | "error";
-}
+import { useToast } from "@/app/customToastNotification/components/Toast/useToast";
 
 const CustomToastNotification = () => {
-    const [toasts, setToasts] = useState<Toast[]>([]);
-
-    const timers = useRef<Map<number, NodeJS.Timeout>>(new Map());
-
-    const handleToast = () => {
-        const id = Date.now();
-        
-        const newToast = {
-            id,
-            message: "Saved Successfully",
-            type: "success" as const,
-        };
-        
-        setToasts((prev) => [...prev, newToast]);
-
-        const timer = setTimeout(() => {  //remove the toast id from array after 3 seconds.
-            removeToast(id);
-        }, 3000);
-
-        timers.current.set(id, timer);
-    };
-
-
-    const removeToast = (id: number) => {
-        const timer = timers.current.get(id);
-
-        if(timer)  {
-            clearTimeout(timer);
-            timers.current.delete(id);
-        }
-        
-        setToasts((prev) => 
-            prev.filter((toast) => toast.id !== id)
-        );
-    }
-
+    const {showToast} = useToast();
 
   return (
-    <div className="p-20">
-        <button onClick={handleToast}>
-            Show Toast
-        </button>
+    <div className="p-20 flex gap-10">
+        <button
+                onClick={() =>
+                    showToast(
+                        "Saved Successfully",
+                        "success"
+                    )
+                }
+                className="border-2 border-green-300 bg-green-200 p-2 rounded text-black"
+            >
+                Success Toast
+            </button>
 
-        {toasts.map((toast) => (
-            <Toast
-                key={toast.id}
-                message={toast.message}
-                type={toast.type}
-                onClose={() => removeToast(toast.id)}
-            />
-        ))}
+            <button
+                onClick={() =>
+                    showToast(
+                        "Something went wrong",
+                        "error"
+                    )
+                }
+                className="border-2 border-red-300 bg-red-200 p-2 rounded text-black"
+            >
+                Error Toast
+            </button>
+
+        
     </div>
   )
 }
