@@ -40,6 +40,11 @@ const questions = [
     id: 8, 
     title: "MultiSelectAutoSuggestInputTagTest",
     link: "/multiSelectAutoSuggestInputTagTest"
+  },
+  {
+    id: 9,
+    title: "Kanban",
+    link: "kanban"
   }
 ]
 
