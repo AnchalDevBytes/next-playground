@@ -1,26 +1,32 @@
-import { Todo } from '../page';
+"use client";
+import { useDroppable } from '@dnd-kit/core';
+import { ColumnType } from '../types';
 import TaskCard from './TaskCard';
 
 interface Props {
-    title: string;
-    tasks: Todo[];
-    onMove?: (task: Todo) => void;
+    column: ColumnType;
 }
 
 const Column = ({
-    title,
-    tasks,
-    onMove,
+    column
 } : Props) => {
-  return (
-    <div className='border rounded p-4 h-[80vh] min-w-sm max-w-sm'>
-        <h2 className='text-xl font-bold mb-4'>{title}</h2>
 
-        {tasks.map((task) => (
+    const { setNodeRef } = useDroppable({
+        id: column.id
+    });
+
+  return (
+    <div 
+        ref={setNodeRef}
+        className='border rounded p-4 h-[80vh] min-w-sm max-w-sm flex flex-col gap-5'
+    >
+        <h2 className='text-xl font-bold mb-4'>{column.title}</h2>
+
+        {column.tasks.map((task) => (
             <TaskCard
-                key={task.id}
+                key={task?.id}
                 task={task}
-                onMove={onMove}
+                columnId={column.id}
             />
         ))}
     </div>

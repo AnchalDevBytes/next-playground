@@ -1,26 +1,43 @@
-import React from 'react'
-import { Todo } from '../page';
+import { useDraggable } from "@dnd-kit/core";
+import { Todo } from "../types";
+import { CSS } from "@dnd-kit/utilities";
+
 
 interface Props {
     task: Todo;
-    onMove?: (task: Todo) => void;
+    columnId: string;
 }
 
 const TaskCard = ({
     task,
-    onMove
+    columnId
 }: Props) => {
-  return (
-    <div className='flex justify-between border p-3 rounded mb-3 w-full'>
-        <p>{task.title}</p>
 
-        {onMove && (
-            <button
-                onClick={() => onMove(task)}
-            >
-                Move →
-            </button>
-        )}
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform
+    } = useDraggable({
+        id: task.id,
+        data: {
+            columnId
+        },
+    });
+
+    const style = {
+        transform: CSS.Translate.toString(transform),
+    };
+
+  return (
+    <div 
+        ref={setNodeRef}
+        style={style}
+        {...listeners}
+        {...attributes}
+        className="border rounded-lg p-3 cursor-grab shadow"
+    >
+        {task.title}
     </div>
   )
 }
