@@ -1,14 +1,16 @@
 "use client";
 import { useDroppable } from '@dnd-kit/core';
-import { ColumnType } from '../types';
-import TaskCard from './TaskCard';
+import { Column as ColumnType, Task } from '@/app/kanban/types';
+import TaskCard from '@/app/kanban/components/TaskCard';
 
 interface Props {
     column: ColumnType;
+    tasks: Record<string, Task>;
 }
 
 const Column = ({
-    column
+    column,
+    tasks
 } : Props) => {
 
     const { setNodeRef } = useDroppable({
@@ -22,10 +24,10 @@ const Column = ({
     >
         <h2 className='text-xl font-bold mb-4'>{column.title}</h2>
 
-        {column.tasks.map((task) => (
+        {column.taskIds.map((taskId) => (
             <TaskCard
-                key={task?.id}
-                task={task}
+                key={taskId}
+                task={tasks[taskId]}
                 columnId={column.id}
             />
         ))}

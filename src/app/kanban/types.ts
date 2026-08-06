@@ -1,10 +1,16 @@
-export interface Todo {
+export interface Task {
     id: string;
     title: string;
 }
 
-export interface ColumnType {
+export interface Column {
     id: string;
     title: string;
-    tasks: Todo[];
+    taskIds: string[];
+}
+
+export interface BoardState {
+    tasks: Record<string, Task>;
+    columns: Record<string, Column>;
+    columnOrder: string[];
 }

@@ -1,10 +1,10 @@
 import { useDraggable } from "@dnd-kit/core";
-import { Todo } from "../types";
 import { CSS } from "@dnd-kit/utilities";
+import { Task } from "@/app/kanban/types";
 
 
 interface Props {
-    task: Todo;
+    task: Task;
     columnId: string;
 }
 

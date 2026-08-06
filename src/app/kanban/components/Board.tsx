@@ -1,54 +1,12 @@
 "use client";
 import { useState } from "react";
-import { ColumnType } from "../types";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
-import Column from "./Column";
+import Column from "@/app/kanban/components/Column";
+import { initialBoard } from "@/app/kanban/data";
+import { BoardState } from "@/app/kanban/types";
 
 const Board = () => {
-     const [columns, setColumns] = useState<ColumnType[]>([
-        {
-            id: "todo",
-            title: "Todo",
-            tasks: [
-                { id: "1", title: "Learn React" },
-                { id: "2", title: "Learn TypeScript" },
-            ],
-        },
-        {
-            id: "progress",
-            title: "In Progress",
-            tasks: [],
-        },
-        {
-            id: "done",
-            title: "Done",
-            tasks: [],
-        },
-    ]);
-
-    const moveTask = (
-        taskId: string,
-        sourceId: string,
-        destinationId: string
-    ) => {
-        if(sourceId === destinationId) return;
-
-        setColumns((prev) => {
-            const updated = structuredClone(prev);
-
-            const sourceColumn = updated.find((col) => col.id === sourceId)!;
-        
-            const destinationColumn = updated.find((col) => col.id === destinationId)!;
-
-            const taskIndex = sourceColumn.tasks.findIndex((task) => task.id === taskId);
-
-            const [task] = sourceColumn.tasks.splice(taskIndex, 1);
-
-            destinationColumn.tasks.push(task);
-            return updated;
-        });
-    }
-    
+     const [board, setBoard] = useState(initialBoard);    
 
     function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
@@ -56,22 +14,41 @@ const Board = () => {
         if(!over) return;
 
         const sourceId = active.data.current?.columnId;
-        const destinationId = over.id;
+        const destinationId = over.id as string;
 
-        moveTask(
-            active.id as string,
-            sourceId,
-            destinationId as string
-        );
+        if(sourceId === destinationId) return;
+
+        const taskId = active.id as string;
+
+        setBoard((prev : BoardState) => {
+            const source = prev.columns[sourceId];
+            const destination = prev.columns[destinationId];
+
+            return {
+                ...prev,
+                columns: {
+                    ...prev.columns,
+                    [sourceId] : {
+                        ...source,
+                        taskIds: source.taskIds.filter(((id) => id !== taskId))
+                    },
+                    [destinationId] : {
+                        ...destination,
+                        taskIds: [...destination.taskIds, taskId],
+                    },
+                },
+            }
+        })
     }
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
         <div className="flex gap-6">
-            {columns.map((column) => (
+            {board.columnOrder.map((columnId) => (
                 <Column
-                    key={column.id}
-                    column={column}
+                    key={columnId}
+                    column={board.columns[columnId]}
+                    tasks={board.tasks}
                 />
             ))}
         </div>
