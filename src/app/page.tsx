@@ -45,6 +45,16 @@ const questions = [
     id: 9,
     title: "Kanban",
     link: "kanban"
+  },
+  {
+    id: 10,
+    title: "InfiniteScrollWithIntersectionObserver",
+    link: "/infiniteScrollWithIntersectionObserver"
+  },
+  {
+    id: 11,
+    title: "OtpInput",
+    link: "/otpInput"
   }
 ]
 
